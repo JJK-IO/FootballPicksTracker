@@ -1,0 +1,59 @@
+{% extends 'teamtrack/base.html' %}
+{% load staticfiles %}
+
+{% block title %}NFL Weekly Games{% endblock %}
+
+{% block links %}
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+  <section class="hero is-dark is-bold">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title has-text-centered">
+          Week {{ week }} Picks
+        </h1>
+        <p class="is-size-7 has-text-centered">Logged in
+          as {{ request.user.first_name }} {{ request.user.last_name }}</p>
+      </div>
+    </div>
+  </section>
+  <section class="section is-dark">
+    <div class="container has-text-centered">
+      <h1 class="title has-text-light">User Picks</h1>
+      <table class="table main is-dark is-fullwidth is-striped">
+        <thead>
+        <tr>
+          <th>User</th>
+          {% for game in data.games %}
+            <th><abbr title="{{ game.home_team }} vs. {{ game.away_team }}">{{ game }}</abbr></th>
+          {% endfor %}
+        </tr>
+        </thead>
+        <tfoot>
+        <tr>
+          <th>User</th>
+          {% for game in data.games %}
+            <th><abbr title="{{ game.home_team }} vs. {{ game.away_team }}">{{ game }}</abbr></th>
+          {% endfor %}
+        </tr>
+        </tfoot>
+        <tbody>
+        {% for user in data.users %}
+          <tr>
+            <td>{{ user.name }}</td>
+            {% for pick in user.user_picks %}
+              <td>{{ pick.pick.espn_abbv }}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+        <tr></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

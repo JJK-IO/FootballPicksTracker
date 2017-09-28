@@ -28,20 +28,23 @@
   </div>
   <div id="navMenu" class="navbar-menu">
     <div class="navbar-start">
-      <a class="navbar-item " href="{% url 'teamtrack:login' %}">
-        <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;Home
+      <a class="navbar-item" href="{% url 'teamtrack:login' %}">
+        <i class="fa fa-home" aria-hidden="true"></i>&nbsp;Home
       </a>
-      <a class="navbar-item " href="{% url 'teamtrack:weekpick' week=this_week %}">
+      <a class="navbar-item" href="{% url 'teamtrack:weekpick' week=this_week %}">
         <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;This Week ({{ this_week }})
+      </a>
+      <a class="navbar-item" href="{% url 'teamtrack:seepicks' week=this_week %}">
+        <i class="fa fa-table" aria-hidden="true"></i>&nbsp;Week {{ this_week }} Picks
       </a>
     </div>
     <div class="navbar-end">
       {% if user.is_authenticated %}
-        <a class="navbar-item is-pulled-right" href="{% url 'teamtrack:logout' %}">
+        <a class="navbar-item" href="{% url 'teamtrack:logout' %}">
           <i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;Logout
         </a>
       {% else %}
-        <a class="navbar-item is-pulled-right" href="{% url 'teamtrack:login' %}">
+        <a class="navbar-item" href="{% url 'teamtrack:login' %}">
           <i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;Login / Register
         </a>
       {% endif %}
@@ -53,11 +56,12 @@
   <div class="container">
     <div class="content has-text-centered">
       <p>
-        <strong>NFL Pick</strong> by <a href="http://jjkuo.com">Jason Kuo</a>.
+        <strong>Football Picker</strong> by <a href="http://jjkuo.com">Jason Kuo</a>.
       </p>
       <p>
         The content of this website is meant for personal use.<br>
-        Any images, names and other seemingly real entities are use is completely fictional and do not refer to the real world counterparts.
+        Any images, names and other seemingly real entities are use is completely fictional and do not refer to the real
+        world counterparts.
       </p>
     </div>
   </div>
@@ -90,6 +94,25 @@
     }
     return cookieValue;
   }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    // Get all "navbar-burger" elements
+    var $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+    // Check if there are any navbar burgers
+    if ($navbarBurgers.length > 0) {
+      // Add a click event on each of them
+      $navbarBurgers.forEach(function ($el) {
+        $el.addEventListener('click', function () {
+          // Get the target from the "data-target" attribute
+          var target = $el.dataset.target;
+          var $target = document.getElementById(target);
+          // Toggle the class on both the "navbar-burger" and the "navbar-menu"
+          $el.classList.toggle('is-active');
+          $target.classList.toggle('is-active');
+        });
+      });
+    }
+  });
 </script>
 {% block script %}{% endblock %}
 </body>

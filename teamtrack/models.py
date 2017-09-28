@@ -43,7 +43,7 @@ class Game(models.Model):
         return obj
 
     def __str__(self):
-        return "%s %s %svs%s" % (self.season, self.week, self.home_team.espn_abbv, self.away_team.espn_abbv)
+        return "%s vs %s" % (self.home_team.espn_abbv, self.away_team.espn_abbv)
 
 
 class Pick(models.Model):

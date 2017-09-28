@@ -11,6 +11,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views import View
 
+from logger import Log
 from teamtrack.models import Game, Team, Pick, TieBreaker
 
 
@@ -165,6 +166,39 @@ class LoginView(View):
 def logout(request):
     auth.logout(request)
     return HttpResponseRedirect(reverse('teamtrack:index'))
+
+
+class SeePickView(View):
+    def get(self, request, week):
+        games = Game.objects.filter(week=week).order_by('datetime')
+        users = User.objects.all().order_by('last_name')
+        data = {
+            'users': [],
+            'games': []
+        }
+        for game in games:
+            data['games'].append(game)
+        for user in users:
+            Log.i("Looking at user: %s %s" % (user.first_name, user.last_name))
+            try:
+                user_data = {
+                    'name': '%s %s' % (user.first_name, user.last_name),
+                    'user_picks': [],
+                    'tie_breaker': TieBreaker.objects.get(week=week, user=user).points
+                }
+                for game in games:
+                    user_data['user_picks'].append(Pick.objects.get(user=user, game=game))
+                data['users'].append(user_data)
+            except TieBreaker.DoesNotExist:
+                Log.i('%s %s Does not have Tie Breaker' % (user.first_name, user.last_name))
+
+        kwargs = {
+            'this_week': get_closest_game_by_date(timezone.now()).week,
+            'week': week,
+            'data': data
+        }
+
+        return render(request, 'teamtrack/see.html', kwargs)
 
 
 class RegisterView(View):

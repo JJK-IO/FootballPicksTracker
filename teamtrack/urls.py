@@ -16,11 +16,12 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 
-from teamtrack.views import IndexView, WeekPickView, LoginView, logout, RegisterView
+from teamtrack.views import IndexView, WeekPickView, LoginView, logout, RegisterView, SeePickView
 
 urlpatterns = [
     url(r'^$', IndexView.as_view(), name='index'),
     url(r'^week/(?P<week>[0-9]+)/$', login_required(WeekPickView.as_view()), name='weekpick'),
+    url(r'^see_picks/(?P<week>[0-9]+)/$', login_required(SeePickView.as_view()), name='seepicks'),
     url(r'^login/$', LoginView.as_view(), name='login'),
     url(r'^register/$', RegisterView.as_view(), name='register'),
     url(r'^logout/$', logout, name='logout'),
