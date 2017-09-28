@@ -27,7 +27,7 @@ DEBUG = False
 if DEBUG:
     ALLOWED_HOSTS = ['*']
 else:
-    ALLOWED_HOSTS = ['fantasy.jjk.io']
+    ALLOWED_HOSTS = ['footballpicks.jjk.io']
 
 # Application definition
 
