@@ -2,8 +2,6 @@ import datetime
 import logging
 import os
 
-from ux2d_project import settings
-
 
 class Log:
     def __init__(self):
@@ -14,7 +12,7 @@ class Log:
 
         logging.basicConfig(
             filename='logs/%s-project.log' % datetime.date.today(),
-            level=settings.LOG_LEVEL,
+            level=logging.DEBUG,
             format=log_format
         )
 
