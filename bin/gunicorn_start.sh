@@ -7,8 +7,8 @@ VIRTUAL_ENV=/opt/fantasyfootball                         # Virtual Environment b
 USER=webapps                                        # the user to run as
 GROUP=webapps                                       # the group to run as
 NUM_WORKERS=4                                       # how many worker processes should Gunicorn spawn
-DJANGO_SETTINGS_MODULE=fantasytracker.settings          # which settings file should Django use
-DJANGO_WSGI_MODULE=fantasytracker.wsgi                  # WSGI module name
+DJANGO_SETTINGS_MODULE=football_picks.settings          # which settings file should Django use
+DJANGO_WSGI_MODULE=football_picks.wsgi                  # WSGI module name
 
 echo "Starting $NAME as `whoami`"
 
