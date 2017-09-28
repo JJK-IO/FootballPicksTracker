@@ -211,6 +211,10 @@ label > input:checked ~ .custom-hand-egg-radio { /* (RADIO CHECKED) IMAGE STYLES
   }
 }
 
+.has-horizontal-overflow {
+  overflow-x: scroll;
+}
+
 @media screen and (max-width: 1023px) {
   .navbar-menu {
     background-color: #363636;
