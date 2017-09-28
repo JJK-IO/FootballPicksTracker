@@ -21,13 +21,13 @@ class IndexView(View):
         all_games = Game.objects.all().order_by('week')
         game_weeks = []
         for week in range(1, latest_week):
-            last_game = Game.objects.filter(week=week).order_by('-datetime')[0]
+            first_game = Game.objects.filter(week=week).order_by('datetime')[0]
             pick_allowed = True
-            if timezone.now() > last_game.datetime:
+            if timezone.now() > first_game.datetime:
                 pick_allowed = False
             user_picked = False
             if request.user.is_authenticated():
-                if len(Pick.objects.filter(user=request.user, game=last_game)) != 0:
+                if len(Pick.objects.filter(user=request.user, game=first_game)) != 0:
                     user_picked = True
             game_weeks.append({'week': week, 'open': pick_allowed, 'picked': user_picked})
 
@@ -61,10 +61,11 @@ class WeekPickView(View):
         kwargs = {
             'game_data': game_data,
             'monday_points': monday_points,
-            'this_week': get_closest_game_by_date(timezone.now()).week
+            'this_week': get_closest_game_by_date(timezone.now()).week,
+            'disabled': False
         }
 
-        if timezone.now() > games.reverse()[0].datetime:
+        if timezone.now() > games[0].datetime:
             kwargs['disabled'] = True
 
         return render(request, 'teamtrack/week.html', kwargs)
@@ -73,6 +74,7 @@ class WeekPickView(View):
         json_data = json.loads(request.body.decode("utf-8"))
         errors = []
         errors_game_id = []
+        first_game = Game.objects.filter(week=week).order_by('datetime')[0]
         if 'choices' in json_data:
             for choice in json_data['choices']:
                 relevant_game = Game.objects.get(id=choice['game'])
@@ -81,17 +83,18 @@ class WeekPickView(View):
                         user=request.user,
                         game=relevant_game
                     )
-                    if timezone.now() < relevant_game.datetime:
+                    if timezone.now() < first_game.datetime:
                         user_pick.pick = Team.objects.get(name=choice['winner'])
                         user_pick.save()
                     else:
                         if user_pick.pick != Team.objects.get(name=choice['winner']):
-                            errors.append('Cannot update %s vs %s game. The game has already started.' % (
-                                relevant_game.home_team, relevant_game.away_team
-                            ))
+                            errors.append(
+                                'Cannot update %s vs %s game after the first game of week has already started.' % (
+                                    relevant_game.home_team, relevant_game.away_team
+                                ))
                             errors_game_id.append(relevant_game.id)
                 except Pick.DoesNotExist:
-                    if timezone.now() < relevant_game.datetime:
+                    if timezone.now() < first_game.datetime:
                         new_pick = Pick(
                             user=request.user,
                             game=relevant_game,
@@ -99,13 +102,13 @@ class WeekPickView(View):
                         )
                         new_pick.save()
                     else:
-                        errors.append('Cannot update %s vs %s game after it has already started.' % (
-                            relevant_game.home_team, relevant_game.away_team
-                        ))
+                        errors.append(
+                            'Cannot update %s vs %s game after the first game of week has already started.' % (
+                                relevant_game.home_team, relevant_game.away_team
+                            ))
                         errors_game_id.append(relevant_game.id)
         if 'monday_points' in json_data:
-            last_game = Game.objects.filter(week=week).order_by('-datetime')[0]
-            if timezone.now() < last_game.datetime:
+            if timezone.now() < first_game.datetime:
                 try:
                     tie_break = TieBreaker.objects.get(
                         user=request.user,
@@ -121,7 +124,9 @@ class WeekPickView(View):
                     )
                     new_tie_breaker.save()
             else:
-                errors.append('Cannot update monday game tie breaker points after the game has started.')
+                errors.append(
+                    'Cannot update monday game tie breaker points after the first game of week has already started.'
+                )
             if len(errors) == 0:
                 return JsonResponse({'success': True})
             else:
@@ -155,7 +160,10 @@ class LoginView(View):
         if not request.user.is_authenticated():
             if len(User.objects.all()) == 0:
                 return HttpResponseRedirect(reverse("user:first_run"))
-            c = {'this_week': get_closest_game_by_date(timezone.now()).week}
+
+            c = {
+                'this_week': get_closest_game_by_date(timezone.now()).week
+            }
             c.update(csrf(request))
 
             return render(request, 'teamtrack/login.html', c)
@@ -197,6 +205,8 @@ class SeePickView(View):
             'week': week,
             'data': data
         }
+        if timezone.now() > games[0].datetime:
+            kwargs['disabled'] = True
 
         return render(request, 'teamtrack/see.html', kwargs)
 

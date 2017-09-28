@@ -22,35 +22,41 @@
   <section class="section is-dark has-horizontal-overflow">
     <div class="container has-text-centered">
       <h1 class="title has-text-light">User Picks</h1>
-      <table class="table main is-dark is-fullwidth is-striped">
-        <thead>
-        <tr>
-          <th>User</th>
-          {% for game in data.games %}
-            <th><abbr title="{{ game.home_team }} vs. {{ game.away_team }}">{{ game }}</abbr></th>
-          {% endfor %}
-        </tr>
-        </thead>
-        <tfoot>
-        <tr>
-          <th>User</th>
-          {% for game in data.games %}
-            <th><abbr title="{{ game.home_team }} vs. {{ game.away_team }}">{{ game }}</abbr></th>
-          {% endfor %}
-        </tr>
-        </tfoot>
-        <tbody>
-        {% for user in data.users %}
+      {% if disabled %}
+        <table class="table main is-dark is-fullwidth is-striped">
+          <thead>
           <tr>
-            <td>{{ user.name }}</td>
-            {% for pick in user.user_picks %}
-              <td>{{ pick.pick.espn_abbv }}</td>
+            <th>User</th>
+            {% for game in data.games %}
+              <th><abbr title="{{ game.home_team }} vs. {{ game.away_team }}">{{ game }}</abbr></th>
             {% endfor %}
           </tr>
-        {% endfor %}
-        <tr></tr>
-        </tbody>
-      </table>
+          </thead>
+          <tfoot>
+          <tr>
+            <th>User</th>
+            {% for game in data.games %}
+              <th><abbr title="{{ game.home_team }} vs. {{ game.away_team }}">{{ game }}</abbr></th>
+            {% endfor %}
+          </tr>
+          </tfoot>
+          <tbody>
+          {% for user in data.users %}
+            <tr>
+              <td>{{ user.name }}</td>
+              {% for pick in user.user_picks %}
+                <td>{{ pick.pick.espn_abbv }}</td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+          <tr></tr>
+          </tbody>
+        </table>
+      {% else %}
+        <h2 class="highlight has-text-light">
+          This week's games haven't started yet. Seeing user picks is disabled until the first game of the week starts.
+        </h2>
+      {% endif %}
     </div>
   </section>
 {% endblock %}

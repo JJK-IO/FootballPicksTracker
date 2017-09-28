@@ -26,11 +26,18 @@ DEBUG = False
 
 if DEBUG:
     ALLOWED_HOSTS = ['*']
+    LANGUAGE_CODE = 'en-us'
+    TIME_ZONE = 'US/Central'
 else:
     ALLOWED_HOSTS = ['footballpicks.jjk.io']
+    LANGUAGE_CODE = 'en-us'
+    TIME_ZONE = 'UTC'
+
+USE_I18N = True
+USE_L10N = True
+USE_TZ = True
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -100,13 +107,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/1.11/topics/i18n/
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'US/Central'
-USE_I18N = True
-USE_L10N = True
-USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/

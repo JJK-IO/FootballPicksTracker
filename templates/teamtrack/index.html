@@ -29,7 +29,7 @@
         </tfoot>
         <tbody>
         {% for week in game_weeks %}
-          <tr>
+          <tr class="is-clickable" onclick="document.location='{% if not week.open %}{% url 'teamtrack:seepicks' week=week.week %}{% else %}{% url 'teamtrack:weekpick' week=week.week %}{% endif %}'">
             <td><a href="{% url 'teamtrack:weekpick' week=week.week %}">Week {{ week.week }}</a></td>
             {% if user.is_authenticated %}
               <td>
@@ -52,4 +52,5 @@
 {% endblock %}
 
 {% block script %}
+
 {% endblock %}
