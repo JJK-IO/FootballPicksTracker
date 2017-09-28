@@ -32,10 +32,10 @@
         <i class="fa fa-home" aria-hidden="true"></i>&nbsp;Home
       </a>
       <a class="navbar-item" href="{% url 'teamtrack:weekpick' week=this_week %}">
-        <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;This Week ({{ this_week }})
+        <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;My Picks (Week {{ this_week }})
       </a>
       <a class="navbar-item" href="{% url 'teamtrack:seepicks' week=this_week %}">
-        <i class="fa fa-table" aria-hidden="true"></i>&nbsp;Week {{ this_week }} Picks
+        <i class="fa fa-table" aria-hidden="true"></i>&nbsp;This Week's Picks ({{ this_week }})
       </a>
     </div>
     <div class="navbar-end">
