@@ -1,0 +1,55 @@
+{% extends 'teamtrack/base.html' %}
+{% load staticfiles %}
+
+{% block title %}NFL Weekly Games{% endblock %}
+
+{% block links %}
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+  <section class="section is-medium is-dark">
+    <div class="container has-text-centered">
+      <table class="table main is-dark is-fullwidth is-striped">
+        <thead>
+        <tr>
+          <th><abbr title="Week">Week</abbr></th>
+          {% if user.is_authenticated %}
+            <th><abbr title="Vote">Vote</abbr></th>{% endif %}
+          <th><abbr title="Closed">Closed</abbr></th>
+        </tr>
+        </thead>
+        <tfoot>
+        <tr>
+          <th><abbr title="Week">Week</abbr></th>
+          {% if user.is_authenticated %}
+            <th><abbr title="Vote">Vote</abbr></th>{% endif %}
+          <th><abbr title="Closed">Closed</abbr></th>
+        </tr>
+        </tfoot>
+        <tbody>
+        {% for week in game_weeks %}
+          <tr>
+            <td><a href="{% url 'teamtrack:weekpick' week=week.week %}">Week {{ week.week }}</a></td>
+            {% if user.is_authenticated %}
+              <td>
+                {% if week.picked %}
+                  <i class="fa fa-check-circle-o" aria-hidden="true"></i>
+                {% else %}
+                  <i class="fa fa-circle-o" aria-hidden="true"></i>
+                {% endif %}
+              </td>
+            {% endif %}
+            <td>
+              {% if not week.open %}<i class="fa fa-history" aria-hidden="true"></i>{% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

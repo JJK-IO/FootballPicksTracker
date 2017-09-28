@@ -1,0 +1,96 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <!-- Meta, title, CSS, favicons, etc. -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/bulma.css' %}">
+  <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+  <link href="{% static 'css/pnotify.custom.min.css' %}" media="all" rel="stylesheet" type="text/css"/>
+  {% block links %}
+  {% endblock %}
+</head>
+<body class="is-dark">
+<nav class="navbar is-dark">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="{% url "teamtrack:index" %}">
+      <img src="{% static 'img/football.png' %}" alt="">&nbsp;&nbsp;&nbsp;Fantasy Game Tracker
+    </a>
+    <div class="navbar-burger burger" data-target="navMenu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+  <div id="navMenu" class="navbar-menu">
+    <div class="navbar-start">
+      <a class="navbar-item " href="{% url 'teamtrack:login' %}">
+        <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;Home
+      </a>
+      <a class="navbar-item " href="{% url 'teamtrack:weekpick' week=this_week %}">
+        <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;This Week ({{ this_week }})
+      </a>
+    </div>
+    <div class="navbar-end">
+      {% if user.is_authenticated %}
+        <a class="navbar-item is-pulled-right" href="{% url 'teamtrack:logout' %}">
+          <i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;Logout
+        </a>
+      {% else %}
+        <a class="navbar-item is-pulled-right" href="{% url 'teamtrack:login' %}">
+          <i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;Login / Register
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+{% block body %}{% endblock %}
+<footer class="footer is-dark">
+  <div class="container">
+    <div class="content has-text-centered">
+      <p>
+        <strong>NFL Pick</strong> by <a href="http://jjkuo.com">Jason Kuo</a>.
+      </p>
+      <p>
+        The contents of this website is meant for personal use. <br>
+        Any images, name, use is completely fictional and not referenced to the real world contents.
+      </p>
+    </div>
+  </div>
+</footer>
+{% csrf_token %}
+<script type="text/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/pnotify.custom.min.js' %}"></script>
+<script type="text/javascript">
+  $.ajaxSetup({
+    beforeSend: function (xhr, settings) {
+      if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+        // Only send the token to relative URLs i.e. locally.
+        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+      }
+    }
+  });
+
+  function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      var cookies = document.cookie.split(';');
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = jQuery.trim(cookies[i]);
+        // Does this cookie string begin with the name we want?
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+</script>
+{% block script %}{% endblock %}
+</body>
+</html>

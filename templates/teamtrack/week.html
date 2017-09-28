@@ -1,0 +1,194 @@
+{% extends 'teamtrack/base.html' %}
+{% load staticfiles %}
+
+{% block title %}NFL Weekly Games{% endblock %}
+
+{% block links %}
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+  <section class="hero is-dark is-bold">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title has-text-centered">
+          Week {{ game_data.0.game.week }} {% if disabled %}(Pick Closed){% endif %}
+        </h1>
+        <h2 class="subtitle has-text-centered">
+          Season {{ game_data.0.game.season }}
+        </h2>
+        <p class="is-size-7 has-text-centered">Picks for {{ request.user.first_name }} {{ request.user.last_name }}</p>
+      </div>
+    </div>
+  </section>
+  <section class="section is-dark">
+    <div class="container has-text-centered">
+      <h1 class="title has-text-light">Games</h1>
+      <div class="columns has-text-centered has-text-grey-lighter">
+        <div class="column is-size-4">Home</div>
+        <div class="column is-size-4">VS</div>
+        <div class="column is-size-4">Away</div>
+      </div>
+      <hr>
+      {% for game in game_data %}
+        <div class="columns has-text-centered has-text-grey-lighter game-{{ game.game.id }}">
+          <div class="column has-vertically-aligned-content is-clickable">
+            <label class="is-clickable">
+              <input type="radio" name="{{ game.game.id }}" value="{{ game.game.home_team.name }}"
+                  {% if game.user_pick.name == game.game.home_team.name %} checked{% endif %}/>
+              <p>{{ game.game.home_team.name }}</p>
+              <div class="custom-hand-egg-radio"></div>
+            </label>
+          </div>
+          <div class="column has-vertically-aligned-content">
+            <span class="is-size-7">{{ game.game.datetime | date:"DATETIME_FORMAT" }}</span>
+          </div>
+          <div class="column has-vertically-aligned-content is-clickable">
+            <label class="is-clickable">
+              <input type="radio" name="{{ game.game.id }}" value="{{ game.game.away_team.name }}"
+                  {% if game.user_pick.name == game.game.away_team.name %} checked{% endif %}/>
+              <p>{{ game.game.away_team.name }}</p>
+              <div class="custom-hand-egg-radio"></div>
+            </label>
+          </div>
+        </div>
+        <hr>
+      {% endfor %}
+      <div class="columns is-widescreen is-centered">
+        <div class="column is-half is-narrow">
+          <div class="field">
+            <label class="label">Monday Night Total Points</label>
+            <div class="control">
+              <input id="mondayPoints" class="input" type="number" placeholder="28" value="{{ monday_points }}">
+            </div>
+          </div>
+        </div>
+      </div>
+      <a class="button is-centered is-large {% if not disabled %}is-primary{% else %}is-disabled{% endif %}"
+         {% if disabled %}disabled{% endif %}
+         onclick="check_section(this);">Submit</a>
+    </div>
+  </section>
+{% endblock %}
+
+{% block script %}
+  <script>
+    $(".column").click(function () {
+      console.log("clicky");
+      console.log($(this).find("input"));
+      $(this).find("input").prop("checked", true);
+    });
+
+    function check_section(ref) {
+      if (!$(ref).hasClass('is-disabled')) {
+        var BreakException = {};
+        var missing_select = [];
+        var obj = {"choices": []};
+        {% for game in game_data %}
+          if ($(":radio[name='{{ game.game.id }}']:checked").val() === undefined) {
+            $(".game-{{ game.game.id }}").addClass('needSelect');
+            missing_select.push({{ game.game.id }});
+          } else {
+            $(".game-{{ game.game.id }}").removeClass('needSelect');
+            obj['choices'].push({
+              "game": {{ game.game.id}},
+              "winner": $(":radio[name='{{ game.game.id }}']:checked").val()
+            });
+          }
+        {% endfor %}
+        var $mondayInput = $("#mondayPoints");
+        if ($mondayInput.val() === "") {
+          $('html, body').animate({
+            scrollTop: $mondayInput.offset().top
+          }, 1000);
+          new PNotify({
+            title: 'Error',
+            text: 'You must enter an amount for the Monday Night Game Tie Breaker.',
+            type: 'error'
+          });
+        } else {
+          obj['monday_points'] = $mondayInput.val();
+          if (missing_select.length !== 0) {
+            try {
+              missing_select.forEach(function (id) {
+                $('html, body').animate({
+                  scrollTop: $(".game-" + id).offset().top
+                }, 1000);
+                throw BreakException;
+              });
+            } catch (e) {
+              if (e !== BreakException) throw e;
+            }
+          } else {
+            console.log(obj);
+            $.ajax({
+              url: '{% url 'teamtrack:weekpick' week=game_data.0.game.week %}',
+              method: 'POST',
+              dateType: 'json',
+              data: JSON.stringify(obj),
+              success: function (data) {
+                if ('error' in data) {
+                  data['errors'].forEach(function (msg) {
+                    new PNotify({
+                      title: 'Error',
+                      text: msg,
+                      type: 'error'
+                    });
+                  });
+                  data['game_ids'].forEach(function (id) {
+                    var $game_div = $(".game-" + id);
+                    $game_div.addClass('needSelect');
+                    $('html, body').animate({
+                      scrollTop: $game_div.offset().top
+                    }, 1000);
+                  });
+                } else {
+                  new PNotify({
+                    title: 'Success',
+                    text: 'Submission Accepted',
+                    type: 'success'
+                  });
+                }
+              },
+              error: function () {
+                new PNotify({
+                  title: 'Error',
+                  text: 'ERROR!!!',
+                  type: 'error'
+                });
+              }
+            });
+          }
+        }
+      } else {
+        new PNotify({
+          title: 'Disabled',
+          text: 'Submissions for this week has been disabled.',
+          type: 'error'
+        });
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      // Get all "navbar-burger" elements
+      var $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+      // Check if there are any navbar burgers
+      if ($navbarBurgers.length > 0) {
+        // Add a click event on each of them
+        $navbarBurgers.forEach(function ($el) {
+          $el.addEventListener('click', function () {
+            // Get the target from the "data-target" attribute
+            var target = $el.dataset.target;
+            var $target = document.getElementById(target);
+            // Toggle the class on both the "navbar-burger" and the "navbar-menu"
+            $el.classList.toggle('is-active');
+            $target.classList.toggle('is-active');
+
+          });
+        });
+      }
+
+    });
+
+  </script>
+{% endblock %}

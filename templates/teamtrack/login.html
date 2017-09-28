@@ -1,0 +1,248 @@
+{% extends 'teamtrack/base.html' %}
+{% load staticfiles %}
+
+{% block title %}NFL Weekly Games{% endblock %}
+
+{% block links %}
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+  <section class="section is-medium is-dark">
+    <div class="columns is-widescreen is-centered">
+      <div class="column is-half is-narrow">
+        <div class="has-text-centered">
+          <h1 class="is-size-3">Login Form</h1>
+        </div>
+        <p id="error">{{ error_msg }}</p>
+        <div class="field">
+          <label class="label is-large">Username</label>
+          <div class="control has-icons-left has-icons-right">
+            <input id="username" class="input is-large" placeholder="Username" required autofocus>
+            <span class="icon is-small is-left">
+            <i class="fa fa-user"></i>
+          </span>
+            <span class="icon is-small is-right">
+            <i class="fa fa-asterisk"></i>
+          </span>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label is-large">Password</label>
+          <div class="control has-icons-left has-icons-right">
+            <input id="password" class="input is-large is-half" type="password" placeholder="******">
+            <span class="icon is-small is-left">
+            <i class="fa fa-key"></i>
+          </span>
+            <span class="icon is-small is-right">
+            <i class="fa fa-asterisk"></i>
+          </span>
+          </div>
+        </div>
+        <p class="is-large">&nbsp;</p>
+        <a class="button is-success is-large is-pulled-left" onclick="do_login()">Login</a>
+        <a class="button is-primary is-large is-pulled-right" onclick="open_register()">Create Account</a>
+      </div>
+    </div>
+  </section>
+  <div id="registerModal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <section class="section is-dark">
+        <div class="columns is-widescreen is-centered">
+          <div class="column is-narrow">
+            <div class="has-text-centered">
+              <h1 class="is-size-3">Register Form</h1>
+            </div>
+            <p id="error">{{ error_msg }}</p>
+            <div class="field">
+              <label class="label is-large">Username</label>
+              <div class="control has-icons-left has-icons-right">
+                <input id="reg-username" class="input is-large" placeholder="Username" required autofocus>
+                <span class="icon is-small is-left">
+                  <i class="fa fa-user"></i>
+                </span>
+                <span class="icon is-small is-right">
+                  <i class="fa fa-asterisk"></i>
+                </span>
+              </div>
+            </div>
+            <div class="field">
+              <label class="label is-large">First Name</label>
+              <div class="control has-icons-left has-icons-right">
+                <input id="reg-firstname" class="input is-large" placeholder="John" required>
+                <span class="icon is-small is-left">
+                  <i class="fa fa-id-card"></i>
+                </span>
+                <span class="icon is-small is-right">
+                  <i class="fa fa-asterisk"></i>
+                </span>
+              </div>
+            </div>
+            <div class="field">
+              <label class="label is-large">Last Name</label>
+              <div class="control has-icons-left has-icons-right">
+                <input id="reg-lastname" class="input is-large" placeholder="Doe" required>
+                <span class="icon is-small is-left">
+                  <i class="fa fa-id-card"></i>
+                </span>
+                <span class="icon is-small is-right">
+                  <i class="fa fa-asterisk"></i>
+                </span>
+              </div>
+            </div>
+            <div class="field">
+              <label class="label is-large">Password</label>
+              <div class="control has-icons-left has-icons-right">
+                <input id="reg-password" class="input is-large is-half" type="password" placeholder="******">
+                <span class="icon is-small is-left">
+                  <i class="fa fa-key"></i>
+                </span>
+                <span class="icon is-small is-right">
+                  <i class="fa fa-asterisk"></i>
+                </span>
+              </div>
+            </div>
+            <p class="is-large">&nbsp;</p>
+            <a class="button is-primary is-large is-pulled-left" onclick="register()">Create Account</a>
+          </div>
+        </div>
+      </section>
+    </div>
+    <button class="modal-close is-large" aria-label="close"></button>
+  </div>
+{% endblock %}
+
+{% block script %}
+  <script type="text/javascript">
+    function do_login() {
+      $.ajax({
+        url: window.location.href.toString().split(window.location.host)[1],
+        type: 'POST',
+        data: JSON.stringify({
+          'username': $('#username').val(),
+          'password': $('#password').val()
+        }),
+        success: function (data) {
+          window.location = data.next;
+        },
+        error: function (data) {
+          var error_msg = JSON.parse(data.responseText).error_msg;
+          $('#error').html(error_msg);
+          new PNotify({
+            title: 'Failed',
+            text: error_msg,
+            type: 'error',
+            delay: 3000
+          });
+        }
+      });
+    }
+
+    $(document).keypress(function (e) {
+      if (e.keyCode === 13) {
+        do_login();
+      }
+    });
+
+    function open_register() {
+      $("#registerModal").toggleClass("is-active");
+    }
+
+    $(".modal-background, .modal-close").click(function () {
+      $("#registerModal").removeClass("is-active");
+    });
+
+    function register() {
+      var $username = $("#reg-username");
+      var $firstname = $("#reg-firstname");
+      var $lastname = $("#reg-lastname");
+      var $password = $("#reg-password");
+      var errors = [];
+      if ($username.val() === "") {
+        $username.addClass("is-danger");
+        new PNotify({
+          title: 'Missing Value',
+          text: "You must specify a username.",
+          type: 'error',
+          delay: 3000
+        });
+        errors.push("You must specify a username.");
+      }
+      if ($firstname.val() === "") {
+        $firstname.addClass("is-danger");
+        new PNotify({
+          title: 'Missing Value',
+          text: "You must specify a first name.",
+          type: 'error',
+          delay: 3000
+        });
+        errors.push("You must specify a first name.");
+      }
+      if ($lastname.val() === "") {
+        $lastname.addClass("is-danger");
+        new PNotify({
+          title: 'Missing Value',
+          text: "You must specify a last name.",
+          type: 'error',
+          delay: 3000
+        });
+        errors.push("You must specify a last name.");
+      }
+      if ($password.val() === "") {
+        $password.addClass("is-danger");
+        new PNotify({
+          title: 'Missing Value',
+          text: "You must specify a password.",
+          type: 'error',
+          delay: 3000
+        });
+        errors.push("You must specify a password.");
+      }
+      if ($password.val().length < 6) {
+        $password.addClass("is-danger");
+        new PNotify({
+          title: 'Missing Value',
+          text: "Your password must be longer than 6 characters.",
+          type: 'error',
+          delay: 3000
+        });
+        errors.push("Your password must be longer than 6 characters.");
+      }
+      if (errors.length === 0) {
+        var data = {
+          'username': $username.val(),
+          'first_name': $firstname.val(),
+          'last_name': $lastname.val(),
+          'password': $password.val()
+        };
+        $.ajax({
+          url: "{% url 'teamtrack:register' %}",
+          method: "POST",
+          dataType: "json",
+          data: JSON.stringify(data),
+          success: function () {
+            new PNotify({
+              title: 'Account Created',
+              text: 'You have successfully created an account!',
+              type: 'success',
+              delay: 3000
+            });
+      $("#registerModal").removeClass("is-active");
+          },
+          error: function (data) {
+            console.log("fail");
+            console.log(data);
+            new PNotify({
+              title: 'Account Creation Failed',
+              text: data['responseJSON']['error'],
+              type: 'error',
+              delay: 3000
+            });
+          }
+        });
+      }
+
+    }
+  </script>
+{% endblock %}

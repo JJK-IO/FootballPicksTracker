@@ -1,0 +1,212 @@
+/*!* CUSTOM RADIO & CHECKBOXES*/
+/*http://stackoverflow.com/a/17541916/383904 *!*/
+/*.rad,*/
+/*.ckb {*/
+/*cursor: pointer;*/
+/*user-select: none;*/
+/*-webkit-user-select: none;*/
+/*-webkit-touch-callout: none;*/
+/*}*/
+
+/*.rad > input,*/
+/*.ckb > input { !* HIDE ORG RADIO & CHECKBOX *!*/
+/*visibility: hidden;*/
+/*position: absolute;*/
+/*}*/
+
+/*!* RADIO & CHECKBOX STYLES *!*/
+/*.rad > i,*/
+/*.ckb > i { !* DEFAULT <i> STYLE *!*/
+/*display: inline-block;*/
+/*vertical-align: middle;*/
+/*width: 16px;*/
+/*height: 16px;*/
+/*border-radius: 50%;*/
+/*transition: 0.2s;*/
+/*box-shadow: inset 0 0 0 8px #000000;*/
+/*border: 1px solid gray;*/
+/*background: gray;*/
+/*}*/
+
+/*!* CHECKBOX OVERWRITE STYLES *!*/
+/*.ckb > i {*/
+/*width: 25px;*/
+/*border-radius: 3px;*/
+/*}*/
+
+/*.rad:hover > i { !* HOVER <i> STYLE *!*/
+/*box-shadow: inset 0 0 0 3px #000000;*/
+/*background: gray;*/
+/*}*/
+
+/*.rad > input:checked + i { !* (RADIO CHECKED) <i> STYLE *!*/
+/*box-shadow: inset 0 0 0 3px #000000;*/
+/*background: orange;*/
+/*}*/
+
+/*!* CHECKBOX *!*/
+/*.ckb > input + i:after {*/
+/*content: "";*/
+/*display: block;*/
+/*height: 12px;*/
+/*width: 12px;*/
+/*margin: 2px;*/
+/*border-radius: inherit;*/
+/*transition: inherit;*/
+/*background: gray;*/
+/*}*/
+
+/*.ckb > input:checked + i:after { !* (RADIO CHECKED) <i> STYLE *!*/
+/*margin-left: 11px;*/
+/*background: orange;*/
+/*}*/
+
+section.is-dark {
+  background-color: #1d1d1d;
+}
+
+.needSelect {
+  background-color: #7a0000;
+}
+
+.has-vertically-aligned-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.is-clickable {
+  cursor: pointer;
+}
+
+.footer.is-dark {
+  background-color: #363636;
+  color: whitesmoke;
+}
+
+.is-dark a {
+  color: #00d1b2;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.is-dark a strong {
+  color: currentColor;
+}
+
+.is-dark a:hover {
+  color: #93f58e;
+}
+
+.is-dark strong {
+  color: white;
+}
+
+body.is-dark {
+  background-color: #363636;
+}
+
+html, body {
+  height: 100%;
+}
+
+.is-dark label {
+  color: whitesmoke;
+}
+
+.is-dark h1 {
+  color: #ffffff;
+}
+
+.table.main td, .table.main th {
+  text-align: center;
+}
+
+.table.is-dark tbody tr {
+  background-color: #3f3f3f;
+  color: whitesmoke;
+}
+
+.table.is-dark tbody tr:hover {
+  background-color: #454545;
+}
+
+.table.is-dark thead th, .table.is-dark tfoot th {
+  background-color: #363636;
+  color: whitesmoke;
+}
+
+.table.is-dark.is-striped tbody tr:not(.is-selected):nth-child(even) {
+  background-color: #363636;
+  color: whitesmoke;
+}
+
+.table.is-dark.is-striped tbody tr:not(.is-selected):nth-child(even):hover {
+  background-color: #3f3f3f;
+  color: whitesmoke;
+}
+
+label > input { /* HIDE RADIO */
+  visibility: hidden; /* Makes input not-clickable */
+  position: absolute; /* Remove input from document flow */
+}
+
+label > input ~ .custom-hand-egg-radio { /* IMAGE STYLES */
+  cursor: pointer;
+  width: 45px;
+  height: 25px;
+  background-image: url("../img/hand_egg_unchecked.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  display: inline-block;
+}
+
+label > input:checked ~ .custom-hand-egg-radio { /* (RADIO CHECKED) IMAGE STYLES */
+  background-image: url("../img/hand_egg_checked.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.full-size {
+  height: 100%;
+  width: 100%;
+}
+
+@media print {
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-size: 0.8rem;
+  }
+
+  .columns, .column, label, p, div, h1, h2, section {
+    margin: 0;
+    padding: 0;
+  }
+
+  nav, footer, hr {
+    display: none;
+  }
+
+  .hero, .hero-body {
+    margin: 0;
+    padding: 0;
+  }
+
+  label > input {
+    visibility: visible;
+    position: inherit;
+  }
+
+  label > input ~ .custom-hand-egg-radio {
+    display: none;
+  }
+
+  label > input:checked ~ .custom-hand-egg-radio {
+    display: none;
+  }
+
+  .button {
+    display: none;
+  }
+}
