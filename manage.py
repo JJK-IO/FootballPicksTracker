@@ -3,7 +3,7 @@ import os
 import sys
 
 if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "nfl_game_track.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "fantasytracker.settings")
     try:
         from django.core.management import execute_from_command_line
     except ImportError:

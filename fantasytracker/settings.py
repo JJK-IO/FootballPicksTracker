@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -23,10 +22,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'vf62tu@wrq+ptg6=*l07i-7)m_6kk*4)repwz%3$8*(98ll_sd'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
-
+if DEBUG:
+    ALLOWED_HOSTS = ['*']
+else:
+    ALLOWED_HOSTS = ['fantasy.jjk.io']
 
 # Application definition
 
@@ -50,7 +51,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'nfl_game_track.urls'
+ROOT_URLCONF = 'fantasytracker.urls'
 
 TEMPLATES = [
     {
@@ -69,8 +70,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'nfl_game_track.wsgi.application'
-
+WSGI_APPLICATION = 'fantasytracker.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
@@ -81,7 +81,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -101,7 +100,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 LANGUAGE_CODE = 'en-us'
@@ -109,7 +107,6 @@ TIME_ZONE = 'US/Central'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
@@ -119,8 +116,7 @@ if DEBUG:
         os.path.join(BASE_DIR, "static"),
     ]
 else:
-    STATIC_ROOT = '/webapps/gametrack/static/'
-
+    STATIC_ROOT = '/webapps/fantasyfootball/static/'
 
 # Login URL
 LOGIN_URL = 'teamtrack:login'
