@@ -1,9 +1,9 @@
 #!/bin/bash
 
 NAME="FantasyTracker"                              # Name of the application
-DJANGODIR=/webapps/fantasyfootball                       # Django project directory
-SOCKFILE=/webapps/fantasyfootball/run/gunicorn.sock      # we will communicate using this unix socket
-VIRTUAL_ENV=/opt/fantasyfootball                         # Virtual Environment base directory
+DJANGODIR=/webapps/footballpicks                       # Django project directory
+SOCKFILE=/webapps/footballpicks/run/gunicorn.sock      # we will communicate using this unix socket
+VIRTUAL_ENV=/opt/footballpicks                         # Virtual Environment base directory
 USER=webapps                                        # the user to run as
 GROUP=webapps                                       # the group to run as
 NUM_WORKERS=4                                       # how many worker processes should Gunicorn spawn

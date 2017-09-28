@@ -116,7 +116,7 @@ if DEBUG:
         os.path.join(BASE_DIR, "static"),
     ]
 else:
-    STATIC_ROOT = '/webapps/fantasyfootball/static/'
+    STATIC_ROOT = '/webapps/footballpicks/static/'
 
 # Login URL
 LOGIN_URL = 'teamtrack:login'
