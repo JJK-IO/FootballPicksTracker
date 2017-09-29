@@ -43,7 +43,7 @@
           </div>
           <div class="column has-vertically-aligned-content">
             {#            <span class="is-size-7">US/Central<br>{% timezone "US/Central" %}{{ game.game.datetime|date:"DATETIME_FORMAT" }}{% endtimezone %}</span>#}
-            <span class="is-size-7 timestring">{{ game.game.datetime|date:"U" }}000</span>
+            <span class="is-size-7 timestring">{{ game.game.datetime|date:"U" }}</span>
           </div>
           <div class="column has-vertically-aligned-content is-clickable">
             <label class="is-clickable">
@@ -83,8 +83,8 @@
 
     $('.timestring').each(function () {
 
-      console.log($(this).text());
-      var d = new Date($(this).text());
+      console.log(Integer.parseInt($(this).text() + "000"));
+      var d = new Date(Integer.parseInt($(this).text() + "000"));
       console.log(d);
       $(this).text(d.toLocaleDateString() + ", " + d.toLocaleFormat("%r (%Z)"));
     });
