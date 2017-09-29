@@ -86,7 +86,7 @@
       console.log(parseInt($(this).text() + "000"));
       var d = new Date(parseInt($(this).text() + "000"));
       console.log(d);
-      $(this).text(d.toLocaleDateString() + ", " + d.toLocaleFormat("%r (%Z)"));
+      $(this).text(d.toLocaleDateString() + ", " + d.toLocaleTimeString("%r (%Z)"));
     });
 
     function check_section(ref) {
