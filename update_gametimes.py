@@ -49,7 +49,7 @@ for team in json_response:
                     )
                     new_game.save()
                 elif len(existing_games) == 1:
-                    print("Updating game time. old: %s new: %s" % (existing_games[0].datetime, game[datetime]))
+                    print("Updating game time. old: %s new: %s" % (existing_games[0].datetime, game['date']))
                     existing_games[0].datetime = game['date']
                     existing_games[0].save()
                 else:
