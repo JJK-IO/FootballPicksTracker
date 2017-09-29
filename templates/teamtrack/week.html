@@ -83,8 +83,8 @@
 
     $('.timestring').each(function () {
 
-      console.log(Integer.parseInt($(this).text() + "000"));
-      var d = new Date(Integer.parseInt($(this).text() + "000"));
+      console.log(parseInt($(this).text() + "000"));
+      var d = new Date(parseInt($(this).text() + "000"));
       console.log(d);
       $(this).text(d.toLocaleDateString() + ", " + d.toLocaleFormat("%r (%Z)"));
     });
