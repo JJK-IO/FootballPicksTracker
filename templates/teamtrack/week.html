@@ -74,6 +74,7 @@
 {% endblock %}
 
 {% block script %}
+  <script type="text/javascript" src="{% static 'js/moment.js' %}"></script>
   <script>
     $(".column").click(function () {
       console.log("clicky");
@@ -82,11 +83,8 @@
     });
 
     $('.timestring').each(function () {
-
-      console.log(parseInt($(this).text() + "000"));
       var d = new Date(parseInt($(this).text() + "000"));
-      console.log(d);
-      $(this).text(d.toLocaleDateString() + ", " + d.toLocaleTimeString("%r (%Z)"));
+      $(this).text(moment(d).format('lll'));
     });
 
     function check_section(ref) {
