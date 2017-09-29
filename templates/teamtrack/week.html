@@ -83,6 +83,7 @@
 
     $('.timestring').each(function () {
 
+      console.log($(this).text());
       var d = new Date($(this).text());
       console.log(d);
       $(this).text(d.toLocaleDateString() + ", " + d.toLocaleFormat("%r (%Z)"));
