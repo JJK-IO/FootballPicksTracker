@@ -82,7 +82,9 @@
     });
 
     $('.timestring').each(function () {
+
       var d = new Date($(this).text());
+      console.log(d);
       $(this).text(d.toLocaleDateString() + ", " + d.toLocaleFormat("%r (%Z)"));
     });
 
