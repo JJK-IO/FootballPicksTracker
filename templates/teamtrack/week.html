@@ -81,10 +81,10 @@
       $(this).find("input").prop("checked", true);
     });
 
-    $('.timestring').each(function () {
-      var d = new Date($(this).text());
-      $(this).text(d.toLocaleDateString() + ", " + d.toLocaleFormat("%r (%Z)"));
-    });
+{#    $('.timestring').each(function () {#}
+{#      var d = new Date($(this).text());#}
+{#      $(this).text(d.toLocaleDateString() + ", " + d.toLocaleFormat("%r (%Z)"));#}
+{#    });#}
 
     function check_section(ref) {
       if (!$(ref).hasClass('is-disabled')) {
