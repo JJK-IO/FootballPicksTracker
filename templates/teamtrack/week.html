@@ -42,7 +42,8 @@
             </label>
           </div>
           <div class="column has-vertically-aligned-content">
-            <span class="is-size-7">US/Central<br>{% timezone "US/Central" %}{{ game.game.datetime|date:"DATETIME_FORMAT" }}{% endtimezone %}</span>
+            {#            <span class="is-size-7">US/Central<br>{% timezone "US/Central" %}{{ game.game.datetime|date:"DATETIME_FORMAT" }}{% endtimezone %}</span>#}
+            <span class="is-size-7 timestring">{{ game.game.datetime }}</span>
           </div>
           <div class="column has-vertically-aligned-content is-clickable">
             <label class="is-clickable">
@@ -78,6 +79,11 @@
       console.log("clicky");
       console.log($(this).find("input"));
       $(this).find("input").prop("checked", true);
+    });
+
+    $('.timestring').each(function () {
+      var d = new Date($(this).text());
+      $(this).text(d.toLocaleDateString() + ", " + d.toLocaleFormat("%r (%Z)"));
     });
 
     function check_section(ref) {
@@ -169,7 +175,5 @@
         });
       }
     }
-
-
   </script>
 {% endblock %}
