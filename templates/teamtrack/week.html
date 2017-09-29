@@ -42,7 +42,9 @@
             </label>
           </div>
           <div class="column has-vertically-aligned-content">
-            <span class="is-size-7">{{ game.game.datetime|localtime|date:"DATETIME_FORMAT" }}</span>
+            <span class="is-size-7">{{ game.game.datetime|utc|date:"DATETIME_FORMAT" }}</span><br>
+            <span class="is-size-7">{{ game.game.datetime|localtime|date:"DATETIME_FORMAT" }}</span><br>
+            <span class="is-size-7">{% timezone "US/Central" %}{{ game.game.datetime|date:"DATETIME_FORMAT" }}{% endtimezone %}</span>
           </div>
           <div class="column has-vertically-aligned-content is-clickable">
             <label class="is-clickable">
