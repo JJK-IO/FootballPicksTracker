@@ -1,4 +1,5 @@
 {% extends 'teamtrack/base.html' %}
+{% load tz %}
 {% load staticfiles %}
 
 {% block title %}NFL Weekly Games{% endblock %}
@@ -41,7 +42,7 @@
             </label>
           </div>
           <div class="column has-vertically-aligned-content">
-            <span class="is-size-7">{{ game.game.datetime | date:"DATETIME_FORMAT" }}</span>
+            <span class="is-size-7">{{ game.game.datetime | date:"DATETIME_FORMAT" | localtime }}</span>
           </div>
           <div class="column has-vertically-aligned-content is-clickable">
             <label class="is-clickable">
