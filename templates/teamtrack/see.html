@@ -30,6 +30,7 @@
             {% for game in data.games %}
               <th><abbr title="{{ game.home_team }} vs. {{ game.away_team }}">{{ game }}</abbr></th>
             {% endfor %}
+            <th><abbr title="Monday Tie Breaker Points">TB Points</abbr></th>
           </tr>
           </thead>
           <tfoot>
@@ -38,6 +39,7 @@
             {% for game in data.games %}
               <th><abbr title="{{ game.home_team }} vs. {{ game.away_team }}">{{ game }}</abbr></th>
             {% endfor %}
+            <th><abbr title="Monday Tie Breaker Points">TB Points</abbr></th>
           </tr>
           </tfoot>
           <tbody>
@@ -47,6 +49,7 @@
               {% for pick in user.user_picks %}
                 <td>{{ pick.pick.espn_abbv }}</td>
               {% endfor %}
+              <td>{{ user.tie_breaker }}</td>
             </tr>
           {% endfor %}
           <tr></tr>
