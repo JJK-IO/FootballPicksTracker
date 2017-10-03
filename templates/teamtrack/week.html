@@ -26,18 +26,18 @@
     <div class="container has-text-centered">
       <h1 class="title has-text-light">Games</h1>
       <div class="columns has-text-centered has-text-grey-lighter">
-        <div class="column is-size-4">Home</div>
-        <div class="column is-size-4">VS</div>
         <div class="column is-size-4">Away</div>
+        <div class="column is-size-4">VS</div>
+        <div class="column is-size-4">Home</div>
       </div>
       <hr>
       {% for game in game_data %}
         <div class="columns has-text-centered has-text-grey-lighter game-{{ game.game.id }}">
           <div class="column has-vertically-aligned-content is-clickable">
             <label class="is-clickable">
-              <input type="radio" name="{{ game.game.id }}" value="{{ game.game.home_team.name }}"
-                  {% if game.user_pick.name == game.game.home_team.name %} checked{% endif %}/>
-              <p>{{ game.game.home_team.name }}</p>
+              <input type="radio" name="{{ game.game.id }}" value="{{ game.game.away_team.name }}"
+                  {% if game.user_pick.name == game.game.away_team.name %} checked{% endif %}/>
+              <p>{{ game.game.away_team.name }}</p>
               <div class="custom-hand-egg-radio"></div>
             </label>
           </div>
@@ -47,9 +47,9 @@
           </div>
           <div class="column has-vertically-aligned-content is-clickable">
             <label class="is-clickable">
-              <input type="radio" name="{{ game.game.id }}" value="{{ game.game.away_team.name }}"
-                  {% if game.user_pick.name == game.game.away_team.name %} checked{% endif %}/>
-              <p>{{ game.game.away_team.name }}</p>
+              <input type="radio" name="{{ game.game.id }}" value="{{ game.game.home_team.name }}"
+                  {% if game.user_pick.name == game.game.home_team.name %} checked{% endif %}/>
+              <p>{{ game.game.home_team.name }}</p>
               <div class="custom-hand-egg-radio"></div>
             </label>
           </div>
