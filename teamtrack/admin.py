@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-
 # Register your models here.
 from teamtrack import models
 
@@ -23,7 +22,13 @@ class GameAdmin(admin.ModelAdmin):
     ]
 
 
+class PickAdmin(admin.ModelAdmin):
+    search_fields = [
+        "user__username"
+    ]
+
+
 admin.site.register(models.Team, TeamAdmin)
 admin.site.register(models.Game, GameAdmin)
-admin.site.register(models.Pick)
+admin.site.register(models.Pick, PickAdmin)
 admin.site.register(models.TieBreaker)

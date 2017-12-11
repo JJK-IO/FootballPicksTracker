@@ -195,6 +195,9 @@ class SeePickView(View):
                     'tie_breaker': TieBreaker.objects.get(week=week, user=user).points
                 }
                 for game in games:
+                    print(user.username)
+                    # print(Pick.objects.filter(user=user, game=game))
+                    print(Pick.objects.filter(user=user, game=game))
                     user_data['user_picks'].append(Pick.objects.get(user=user, game=game))
                 data['users'].append(user_data)
             except TieBreaker.DoesNotExist:
